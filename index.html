@@ -10,7 +10,7 @@ addEventListener('resize',()=>{if(busy)return;if(L!==null)L=key();soon()});
 try{screen.orientation.addEventListener('change',soon)}catch(e){}if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(chk,60));
 start();setInterval(chk,400);
 window.__vsettle={chk,key,get last(){return L}}})()</script><!--/vsettle-->
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f4a3c"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f4a3c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <title>Mama MacGregor's Bingo Hall</title><!--og--><meta name="description" content="75-ball bingo in a cozy kirk hall: Mama calls the numbers, play 1 to 4 cards, chase cow-horn and cross patterns and beat the CPU players to BINGO! Pretend coins only."><meta property="og:type" content="website"><meta property="og:site_name" content="Peter&#x27;s Arcade"><meta property="og:title" content="Mama MacGregor&#x27;s Bingo Hall"><meta property="og:description" content="75-ball bingo in a cozy kirk hall: Mama calls the numbers, play 1 to 4 cards, chase cow-horn and cross patterns and beat the CPU players to BINGO! Pretend coins only."><meta property="og:url" content="https://ploug76.github.io/mama-macgregors-bingo-hall/"><meta property="og:image" content="https://ploug76.github.io/mama-macgregors-bingo-hall/cover.png"><meta property="og:image:secure_url" content="https://ploug76.github.io/mama-macgregors-bingo-hall/cover.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Mama MacGregor&#x27;s Bingo Hall 8-bit game box cover"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mama MacGregor&#x27;s Bingo Hall"><meta name="twitter:description" content="75-ball bingo in a cozy kirk hall: Mama calls the numbers, play 1 to 4 cards, chase cow-horn and cross patterns and beat the CPU players to BINGO! Pretend coins only."><meta name="twitter:image" content="https://ploug76.github.io/mama-macgregors-bingo-hall/cover.png"><!--/og--><style>
 html,body{margin:0;height:100%;overflow:hidden;background:#143329;touch-action:none;font-family:"Trebuchet MS","Segoe UI",sans-serif;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
 canvas{display:block;position:fixed;left:0;top:0;width:100%;height:100%}
@@ -226,7 +226,7 @@ return{COLS,letter,idx,bit,FREE,ALL,PATTERNS,rng,makeCard,validCard,daubMask,win
 if(typeof module!='undefined')module.exports=BC;
 
 const GAME_ID='mama-macgregors-bingo-hall';
-const LW=400,LH=720;let SC=1,OXs=0,OYs=0,VW=0,VH=0,GT=0;
+let LW=400,LH=720;let SC=1,OXs=0,OYs=0,VW=0,VH=0,GT=0;
 const PATS=BC.PATTERNS,ROOMS=BC.ROOMS;
 const START_COINS=1000;const SPEEDS=[{n:'Slow',s:7,r:.88},{n:'Normal',s:5,r:.98},{n:'Fast',s:3.6,r:1.08},{n:'Speedy',s:2.6,r:1.2}];
 const POW=[{k:'hoof',n:'Hoof Stomp',ic:'cow',d:'Highland Hoof Stomp: daubs a random square on every card'},{k:'lamb',n:"Lamb's Blessing",ic:'lamb',d:"Lamb's Blessing: tap ANY square to daub it"},{k:'dove',n:"Dove's Peek",ic:'dove',d:"Dove's Peek: see the next 3 balls"},{k:'donkey',n:'Donkey Double',ic:'donkey',d:'Donkey Double: double this game\u2019s prize'}];
@@ -393,7 +393,7 @@ function patHTML(pk){const P=PATS[pk],m=P.masks[0];let s='<div style="display:in
 function showPatterns(){const wasP=paused;if(!paused&&state=='play')togglePause();panel(`<h2>Bingo Patterns</h2>${Object.keys(PATS).map(k=>`<p>${patHTML(k)}<b>${PATS[k].n}</b> — ${PATS[k].d}. Prize ${PATS[k].prize}× the card price.</p>`).join('')}<p>The free centre square counts for every pattern.</p>`,()=>{if(!wasP&&paused)togglePause()})}
 function showStats(){const wasP=paused;if(!paused&&state=='play')togglePause();const b=save.best;panel(`<h2>🏆 Mama's Record Book</h2><table><tr><td>Bingos won</td><td><b>${b.wins}</b></td></tr><tr><td>Games played</td><td>${b.games}</td></tr><tr><td>Biggest prize</td><td><b>🪙 ${fmt(b.win)}</b></td></tr><tr><td>Fastest bingo</td><td><b>${b.fastest<99?b.fastest+' balls':'—'}</b></td></tr><tr><td>Best winning streak</td><td>${b.streak}</td></tr><tr><td>Level</td><td>${save.lvl}</td></tr>${ROOMS.map(r=>`<tr><td>Wins in ${r.n}</td><td>${b.perRoom[r.id]||0}</td></tr>`).join('')}<tr><td>Free refills</td><td>${save.refills}</td></tr></table><p style="font-size:12px;color:#555">Pretend coins only — no real money, nothing to buy.</p>`,()=>{if(!wasP&&paused)togglePause()})}
 // ---------- input
-c.addEventListener('pointerdown',e=>{A();if(panelOpen)return;const[x,y]=toL(e.clientX,e.clientY);if(paused){togglePause();return}
+c.addEventListener('pointerdown',e=>{A();if(panelOpen)return;const[x,y]=toL(e.clientX,e.clientY);if(paused&&!window.EZ_ON){togglePause();return}
  for(const b of activeBtns().slice().reverse())if(x>=b.x&&x<=b.x+b.w&&y>=b.y&&y<=b.y+b.h){if(!b.cell)sfx.click();b.fn();return}if(modal&&modal.k=='board')modal=null});
 addEventListener('keydown',e=>{if(e.code=='KeyP')togglePause();if(e.code=='KeyM'){A();setMute(!muted)}if(e.code=='KeyB'&&state=='play')claim()});
 function togglePause(){if(state!='play')return;paused=!paused;$('pause').textContent=paused?'▶':'⏸';try{paused?speechSynthesis.pause():speechSynthesis.resume()}catch(e){}}
@@ -414,6 +414,134 @@ window.__T={layout,update,startGame,claim,callBall,usePow,closeModal:()=>{if(mod
  get:()=>({state,coins:save.coins,lvl:save.lvl,G:G&&{pk:G.pk,n:G.list.length,over:G.over,need:G.cards.map(c=>BC.need(G.pk,c.m)),meter:G.meter,cpuPending:G.cpus.filter(c=>c.claimAt!=null).length},modal:modal&&modal.k,mq:modalQ.length,msg:msg&&msg.s}),
  setSave:o=>Object.assign(save,o),setRoom:id=>{room=ROOMS.find(r=>r.id==id);save.room=id},state:s=>{state=s},cards:()=>G&&G.cards,daub:(i,r,k)=>daubCell(G.cards[i],r,k,false),save:()=>save,say};
 
+// ================= EASY MODE (Oct 30 2026) for Mama's ~80-year-old players =================
+// One huge PLAY, one LEVEL SELECT, a tiny gear for sound. Big print (24px+), big buttons (64px+), no pop-ups.
+// Logical screen: portrait 400 wide, landscape 400 tall, other side fills the phone (≈ 1 logical px = 1 CSS px on a 412x915 phone).
+window.EZ_ON=true;const EZ={min:99,minT:'',msg:'',msgT:0};
+function ezResize(){VW=CW/DPR;VH=CH/DPR;const aw=VW-SAFE.l-SAFE.r,ah=VH-SAFE.t-SAFE.b;const land=aw>ah*1.15;
+ if(land){LH=400;LW=Math.round(CL(400*aw/ah,760,900))}else{LW=400;LH=Math.round(CL(400*ah/aw,700,900))}EZ.land=land;
+ SC=Math.min(aw/LW,ah/LH);OXs=SAFE.l+(aw-LW*SC)/2;OYs=SAFE.t+(ah-LH*SC)/2}
+function ezFont(sz){return 'bold '+sz+'px "Trebuchet MS","Segoe UI",sans-serif'}
+// text: never below 24 (squeezes to fit only as a last resort, and that is tracked for QA)
+function ezT(s,x,y,sz,col='#fff',al='center',maxw,stroke){s=String(s);sz=Math.max(24,sz);g.font=ezFont(sz);let e=sz;if(maxw){const m=g.measureText(s).width;if(m>maxw){e=sz*maxw/m;g.font=ezFont(e)}}
+ if(e<EZ.min){EZ.min=e;EZ.minT=s.slice(0,24)}g.textAlign=al;g.textBaseline='middle';if(stroke){g.lineJoin='round';g.lineWidth=Math.max(3,e*.16);g.strokeStyle=stroke;g.strokeText(s,x,y)}g.fillStyle=col;g.fillText(s,x,y);g.textBaseline='alphabetic'}
+function ezLines(s,w,sz){g.font=ezFont(sz);const out=[];let line='';for(const wd of String(s).split(' ')){const t=line?line+' '+wd:wd;if(g.measureText(t).width>w&&line){out.push(line);line=wd}else line=t}if(line)out.push(line);return out}
+function ezWrap(s,cx,cy,w,h,sz,col){let f=sz;let L=ezLines(s,w,f);while(f>24&&(L.length*f*1.2>h||L.some(l=>{g.font=ezFont(f);return g.measureText(l).width>w}))){f-=1;L=ezLines(s,w,f)}
+ const lh=f*1.2;L.forEach((l,i)=>ezT(l,cx,cy-(L.length-1)*lh/2+i*lh,f,col,'center',w))}
+function ezBtn(r,label,fn,o={}){const [x,y,w,h]=r;menuBtns.push({x,y,w,h,fn,label,primary:!!o.primary});const col=o.col||'#2b8a3e',rad=Math.min(18,h/2);
+ g.save();g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=8;g.shadowOffsetY=3;g.fillStyle=col;rrect(g,x,y,w,h,rad);g.fill();g.restore();
+ if(o.glow){g.save();g.shadowColor='#ffd43b';g.shadowBlur=24+10*Math.sin(GT*8);g.strokeStyle='#ffd43b';g.lineWidth=5;rrect(g,x,y,w,h,rad);g.stroke();g.restore()}
+ g.fillStyle='rgba(255,255,255,.16)';rrect(g,x+4,y+3,w-8,h*.42,rad*.7);g.fill();g.strokeStyle=o.edge||'rgba(255,255,255,.9)';g.lineWidth=3;rrect(g,x,y,w,h,rad);g.stroke();
+ ezT(label,x+w/2,y+h/2+1,o.fs||Math.min(h*.42,34),o.tc||'#fff','center',w-20,'rgba(0,0,0,.55)')}
+function ezRound(x,y,s,label,fn,col){menuBtns.push({x,y,w:s,h:s,fn,label});g.save();g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=6;g.fillStyle=col;g.beginPath();g.arc(x+s/2,y+s/2,s/2,0,TAU);g.fill();g.restore();g.strokeStyle='#fff';g.lineWidth=3;g.beginPath();g.arc(x+s/2,y+s/2,s/2-1.5,0,TAU);g.stroke();
+ g.font='bold '+Math.round(s*.46)+'px "Segoe UI Emoji","Noto Color Emoji",sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle='#fff';g.fillText(label,x+s/2,y+s/2+2);g.textBaseline='alphabetic'}
+const EZLOGO=new Image();EZLOGO.src='studio-logo.webp';
+// tiny studio logo, only where it touches nothing
+function ezLogo(avoid,h=40){if(!EZLOGO.complete||!EZLOGO.naturalWidth)return null;const w=h*EZLOGO.naturalWidth/EZLOGO.naturalHeight,m=8;
+ for(const [x,y] of [[m,m],[m,LH-h-m],[LW-w-m,LH-h-m],[LW-w-m,m]]){const r=[x,y,w,h];if(avoid.some(a=>r[0]<a[0]+a[2]&&a[0]<r[0]+r[2]&&r[1]<a[1]+a[3]&&a[1]<r[1]+r[3]))continue;
+  g.save();g.globalAlpha=.94;g.fillStyle='rgba(0,0,0,.5)';rrect(g,x-2,y-2,w+4,h+4,6);g.fill();g.drawImage(EZLOGO,x,y,w,h);g.restore();EZ.logo=r;return r}EZ.logo=null;return null}
+function ezPauseOverlay(home){g.fillStyle='rgba(0,0,0,.72)';g.fillRect(0,0,LW,LH);const bw=Math.min(LW-60,380),bh=96,gap=20,x=(LW-bw)/2;let y=Math.max(90,(LH-(2*bh+gap))/2+30);
+ ezT('Paused',LW/2,y-44,48,'#fff');ezBtn([x,y,bw,bh],'▶ Keep playing',()=>{paused=false;try{speechSynthesis.resume()}catch(e){}},{col:'#2b8a3e',fs:36,primary:true});y+=bh+gap;
+ ezBtn([x,y,bw,bh],'🏠 Home',()=>{paused=false;try{speechSynthesis.cancel()}catch(e){}home()},{col:'#1864ab',fs:36})}
+function ezSettingsScreen(bg,back){bg();const bw=Math.min(LW-40,400),bh=108,gap=24,x=(LW-bw)/2;let y=Math.max(80,(LH-(bh*2+gap))/2+16);
+ ezT('Sound',LW/2,y-36,40,'#fff','center',0,'rgba(0,0,0,.6)');ezBtn([x,y,bw,bh],muted?'🔇 Sound is OFF':'🔊 Sound is ON',()=>{A();setMute(!muted)},{col:muted?'#495057':'#2b8a3e',fs:36,primary:true});y+=bh+gap;
+ ezBtn([x,y,bw,Math.min(bh,LH-y-10)],'⬅ Back',back,{col:'#1864ab',fs:34})}
+// keep the rest of the arcade chrome off these screens: no DOM pause/sound/help/install bits, no share dock, no leaderboard pop-ups
+(function(){const st=document.createElement('style');st.textContent='#pause,#mute,#help,#inst,#ios,#dock,#dockHint,#shareToast,#lbBtn,#studioLogo{display:none!important}';document.head.appendChild(st)})();
+// ---------- Bingo, easy mode
+const EZ_AUTO_CLAIM=5,EZ_NEXT=8;
+const _ezHB=hallBg;hallBg=function(){_ezHB();for(let off=400;off<LW;off+=400){g.save();g.beginPath();g.rect(off,0,400,80);g.clip();g.translate(off,0);_ezHB();g.restore()}};
+onResize=ezResize;
+function ezBall(x,y,r,n){const L=BC.letter(n);circ(x,y,r,BALLCOL[L]);circ(x,y,r*.68,'#fff');ezT(n,x,y+1,Math.max(24,r*.72),'#111','center',r*1.2);g.fillStyle='rgba(255,255,255,.5)';g.beginPath();g.ellipse(x-r*.4,y-r*.5,r*.25,r*.14,-.5,0,TAU);g.fill()}
+function ezSign(x,y,w,h){tartanBox(x,y,w,h,18,20,KILT.chain,3);g.fillStyle='rgba(14,21,18,.6)';rrect(g,x+10,y+10,w-20,h-20,12);g.fill();ezT("Mama MacGregor's",x+w/2,y+h*.33,30,'#ffe58a','center',w-40);ezT('BINGO HALL',x+w/2,y+h*.7,46,'#fff','center',w-40,'#7a1020')}
+function ezTitle(){hallBg();const L=EZ.land;let sign,mama,play,lvl;
+ if(!L){sign=[20,84,360,124];play=[24,LH-26-96-18-116,352,116];lvl=[24,play[1]+116+18,352,96];const top=sign[1]+sign[3]+10,bot=play[1]-14,s=Math.min(3.4,(bot-top)/118);mama=[200,top+50*s,s]}
+ else{sign=[16,12,Math.min(380,LW*.46),112];const bx=sign[0]+sign[2]+30,bw=LW-bx-24;play=[bx,92,bw,120];lvl=[bx,230,bw,90];const top=sign[1]+sign[3]+8,s=Math.min(2.5,(LH-10-top)/112);mama=[sign[0]+sign[2]/2,top+48*s,s]}
+ ezSign(...sign);mamaDraw(mama[0],mama[1],mama[2],GT,0,1);const mr=[mama[0]-62*mama[2],mama[1]-48*mama[2],124*mama[2],108*mama[2]];
+ const cs=.5*Math.min(mama[2],2.6)/1.9,dx=Math.min(100*mama[2]/1.9,150);g.save();g.translate(mama[0]-dx,mama[1]+30*mama[2]);g.scale(cs,cs);ART.cow(GT);g.restore();g.save();g.translate(mama[0]+dx,mama[1]+30*mama[2]);g.scale(cs,cs);ART.donkey(GT);g.restore();
+ EZ.chars=[mr];
+ ezBtn(play,'▶ PLAY',ezStart,{col:'#2b8a3e',fs:60,primary:true});ezBtn(lvl,'LEVEL SELECT',()=>{state='levels'},{col:'#1864ab',fs:34});
+ ezRound(LW-72,8,64,'⚙️',()=>{state='settings'},'#495057');
+ ezLogo([sign,play,lvl,mr,[LW-72,8,64,64]])}
+const EZ_HALL_SHORT={cathedral:'Cathedral Hall'};
+function ezLevels(){hallBg();const L=EZ.land;ezBtn([10,10,150,64],'⬅ Back',()=>{state='title'},{col:'#495057',fs:30});ezT('Pick a Hall',L?LW/2:LW/2+70,42,36,'#fff','center',L?LW-360:LW-180,'rgba(0,0,0,.6)');
+ const n=ROOMS.length,top=88,gap=10;let rects=[],foot;
+ if(!L){foot=72+gap+96+16;const ch=Math.min(100,(LH-top-foot-gap*(n-1)-10)/n);ROOMS.forEach((r,i)=>rects.push([14,top+i*(ch+gap),LW-28,ch]))}
+ else{foot=84;const cols=3,cw=(LW-28-gap*2)/3,ch=Math.min(96,(LH-top-foot-gap*2)/2);ROOMS.forEach((r,i)=>{const row=Math.floor(i/cols),inRow=row?n-cols:cols,x0=(LW-(inRow*cw+(inRow-1)*gap))/2;rects.push([x0+(i%cols)*(cw+gap),top+row*(ch+gap),cw,ch])})}
+ ROOMS.forEach((r,i)=>{const [x,y,w,h]=rects[i],sel=save.room==r.id;menuBtns.push({x,y,w,h,fn:()=>{save.room=r.id;room=r;sv()},label:r.n,primary:sel});
+  tartanBox(x,y,w,h,14,16,sel?'#ffd43b':KILT.chain,sel?6:2);g.fillStyle=r.col;g.globalAlpha=.9;rrect(g,x+6,y+6,w-12,h-12,10);g.fill();g.globalAlpha=1;if(sel){g.strokeStyle='#ffd43b';g.lineWidth=6;rrect(g,x,y,w,h,14);g.stroke()}
+  ezT((sel?'✅ ':'')+(EZ_HALL_SHORT[r.id]||r.n),x+w/2,y+h/2,32,'#fff','center',w-24,'rgba(0,0,0,.6)')});
+ const fy=rects[n-1][1]+rects[n-1][3]+gap+6;
+ if(!L){const bw=(LW-28-gap)/2;[1,2].forEach((k,j)=>ezBtn([14+j*(bw+gap),fy,bw,72],k+(k==1?' card':' cards'),()=>{save.ncards=k;sv()},{col:save.ncards==k?'#2b8a3e':'#868e96',fs:30}));
+  const sy=fy+72+gap+6;ezBtn([14,sy,LW-28,Math.min(96,LH-sy-10)],'▶ START',ezStart,{col:'#c8342e',fs:44,primary:true})}
+ else{const by=LH-foot+4,bh=Math.min(76,LH-by-8),bw=170;[1,2].forEach((k,j)=>ezBtn([14+j*(bw+gap),by,bw,bh],k+(k==1?' card':' cards'),()=>{save.ncards=k;sv()},{col:save.ncards==k?'#2b8a3e':'#868e96',fs:30}));
+  const sx=14+2*(bw+gap);ezBtn([sx,by,LW-14-sx,bh],'▶ START',ezStart,{col:'#c8342e',fs:42,primary:true})}}
+function ezStart(){A();save.auto=true;save.speed=0;if(save.ncards!==1&&save.ncards!==2)save.ncards=1;room=ROOMS.find(r=>r.id==save.room)||ROOMS[0];const gi=save.gi[room.id]||0,pk=room.pats[gi%room.pats.length];
+ G={pk,room,cards:Array.from({length:save.ncards},()=>({nums:BC.makeCard(R),m:BC.FREE,anim:{},won:0})),deck:BC.deck(R),called:new Set(),list:[],t:0,next:2.2,ballAnim:0,cpus:BC.makeCPUs(Math.min(4,room.cpus),R),meter:0,dbl:false,peek:0,bless:false,lock:0,over:false,cost:0,usedP:{},pend:[]};
+ G.cpus.forEach(cp=>cp.react=Math.max(cp.react,2.2));EZ.claimT=null;EZ.res=null;EZ.overT=0;EZ.msg='Eyes down!';EZ.msgT=2.4;paused=false;msgQ.length=0;msg=null;modalQ.length=0;modal=null;
+ state='play';chrome(false);playSong(SONG);speak('Eyes down, dearies! This game is '+PATS[pk].n+'.');save.best.games++;sv()}
+function ezClaim(){if(!G||G.over||state!='play')return;const w=playerWinCards();if(w.length){endGame(w,'you',[])}else{sfx.nope();EZ.msg='Not yet, dearie!';EZ.msgT=2}}
+claim=ezClaim;
+const _ezEG=endGame;endGame=function(wc,who,co){_ezEG(wc,who,co||[]);EZ.res={win:who=='you',who:who=='you'?'You':who=='nobody'?'Nobody':who.map(c=>c.name).join(' & ')};EZ.overT=0;modalQ.length=0;modal=null;if(EZ.res.win)for(let i=0;i<60;i++)fx.push({x:LW/2+(R()-.5)*LW*.6,y:LH*.4,vx:(R()-.5)*260,vy:-120-R()*260,t:0,c:PICK(['#e8344a','#2a74c0','#e8c050','#2aa86a','#fff'])})};
+function ezNext(){ezStart()}
+const _ezUpd=update;update=function(dt){
+ if(state=='play'&&G&&!G.over){const has=playerWinCards().length>0;
+  if(has){if(EZ.claimT==null){EZ.claimT=G.t;EZ.msg='You have BINGO!';EZ.msgT=99;sfx.one();speak('You have bingo, dearie! Tap the big button!')}for(const cp of G.cpus)if(cp.claimAt!=null)cp.claimAt=Math.max(cp.claimAt,G.t+1);
+   if(G.t-EZ.claimT>=EZ_AUTO_CLAIM){ezClaim()}else if(window.__T&&__T.bot&&G.t-EZ.claimT>(__T.botDelay||1))ezClaim()}}
+ _ezUpd(dt);msgQ.length=0;msg=null;modalQ.length=0;modal=null;if(EZ.msgT>0)EZ.msgT-=dt;
+ if(state!='play'&&state!='between'){for(const f of fx){f.t+=dt;f.vy+=300*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}fx=fx.filter(f=>f.t<2)}
+ if(state=='play'&&G&&G.over){EZ.overT+=dt;if(EZ.overT>(EZ.res&&EZ.res.win?2.4:1.8)){state='between';EZ.betT=0;playSong(SONG)}}
+ if(state=='between'){EZ.betT+=dt;for(const f of fx){f.t+=dt;f.vy+=300*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}fx=fx.filter(f=>f.t<2);if(EZ.betT>=EZ_NEXT)ezNext()}};
+function ezLay(){const L={};if(!EZ.land){L.top=[8,8,384,72];L.caller=[8,88,384,150];L.bingo=[10,LH-120,380,110];L.cards=[8,248,384,L.bingo[1]-12-248]}
+ else{const lw=Math.min(LW*.47,420);L.top=[8,8,lw,72];L.caller=[8,88,lw,140];L.bingo=[8,238,lw,LH-246];L.cards=[lw+18,8,LW-lw-26,LH-16]}return L}
+function ezCards(A){const n=G.cards.length,gap=10,cols=n==1?1:2,cw=(A[2]-gap*(cols-1))/cols,ch=A[3];
+ G.cards.forEach((c,ci)=>{const head=Math.min(38,ch*.1),cs=Math.min(cw/5,(ch-head-8)/5),w=cs*5,x=A[0]+ci*(cw+gap)+(cw-w)/2,y=A[1]+(ch-head-cs*5)/2;
+  g.fillStyle='rgba(0,0,0,.35)';rrect(g,x+3,y+4,w,head+cs*5,10);g.fill();tartanBox(x-4,y-4,w+8,head+cs*5+8,10,12,KILT.chain,2);g.fillStyle=PAL.cream;g.fillRect(x,y+head,w,cs*5);
+  for(let k=0;k<5;k++)ezT(BC.COLS[k],x+k*cs+cs/2,y+head/2+1,Math.max(24,head*.8),'#fff','center',cs-2);
+  const wm=PATS[G.pk].masks.find(m=>(c.m&m)==m)||0;
+  for(let r=0;r<5;r++)for(let k=0;k<5;k++){const cx=x+k*cs,cy=y+head+r*cs,b=BC.bit(r,k),nn=c.nums[r][k],on=!!(c.m&b);
+   if(wm&b){g.fillStyle='#fff3bf';g.fillRect(cx,cy,cs,cs)}g.strokeStyle='rgba(31,74,60,.35)';g.lineWidth=1;g.strokeRect(cx+.5,cy+.5,cs-1,cs-1);
+   if(nn==0){ezT('★',cx+cs/2,cy+cs/2+1,Math.max(24,cs*.6),'#c92a2a','center',cs-4)}
+   else{ezT(nn,cx+cs/2,cy+cs/2+1,Math.max(24,cs*.5),'#1a1a1a','center',cs-4);if(on){const a=Math.min(1,(c.anim[b]==null?1:c.anim[b])*5);g.globalAlpha=.8*a;circ(cx+cs/2,cy+cs/2,cs*.44*(1.3-.3*a),'#9c36b5');g.globalAlpha=1;ezT(nn,cx+cs/2,cy+cs/2+1,Math.max(24,cs*.5),'#fff','center',cs-4)}}
+   if(!G.over)menuBtns.push({x:cx,y:cy,w:cs,h:cs,fn:()=>daubCell(c,r,k,false),cell:1})}
+  if(BC.need(G.pk,c.m)==0&&!G.over){g.strokeStyle='rgba(255,220,80,'+(.6+.4*Math.sin(GT*10))+')';g.lineWidth=6;rrect(g,x-6,y-6,w+12,head+cs*5+12,12);g.stroke()}})}
+function ezPlay(){hallBg();const L=ezLay(),T=L.top,P=PATS[G.pk];
+ panelBox([T[0],T[1],T[2]-76,T[3]],.82);const ms=T[3]-14,cs=ms/5,m=P.masks[Math.floor(GT/1.2)%P.masks.length];for(let r=0;r<5;r++)for(let k=0;k<5;k++){g.fillStyle=(m>>(r*5+k)&1)?PAL.gold:'rgba(255,255,255,.25)';g.fillRect(T[0]+8+k*cs,T[1]+7+r*cs,cs-2,cs-2)}
+ ezT(P.n,T[0]+ms+20,T[1]+T[3]/2,30,'#fff','left',T[2]-76-ms-30);
+ ezRound(T[0]+T[2]-68,T[1]+(T[3]-68)/2,68,'⏸',()=>{if(!G.over){paused=true;try{speechSynthesis.cancel()}catch(e){}}},'#e8590c');
+ const C=L.caller;panelBox(C,.78);const ms2=Math.min(1.5,C[3]/104);mamaDraw(C[0]+46*ms2,C[1]+C[3]*.42,ms2,GT,talkT||(G.t-(G.lastCall||0)<1.5?1:0),G.over&&EZ.res&&EZ.res.win?1:0);
+ const br=Math.min(C[3]*.4,60),bx=C[0]+96*ms2+br,by=C[1]+C[3]/2,n=G.list[G.list.length-1];
+ if(n){const a=Math.min(1,G.ballAnim*3);ezBall(bx,by,br*(.7+.3*a),n)}else{g.fillStyle='rgba(255,255,255,.15)';g.beginPath();g.arc(bx,by,br,0,TAU);g.fill()}
+ const bx0=bx+br+10,bw=C[0]+C[2]-bx0-8;g.fillStyle=PAL.cream;rrect(g,bx0,C[1]+10,bw,C[3]-20,12);g.fill();g.strokeStyle=KILT.green;g.lineWidth=2;g.stroke();
+ if(EZ.msgT>0&&EZ.msg)ezWrap(EZ.msg,bx0+bw/2,C[1]+C[3]/2,bw-14,C[3]-28,32,'#2a2018');else if(n)ezT(BC.letter(n)+' '+n,bx0+bw/2,C[1]+C[3]/2,Math.min(60,C[3]*.42),'#1a1a1a','center',bw-14);else ezT('Ready…',bx0+bw/2,C[1]+C[3]/2,32,'#1a1a1a','center',bw-14);
+ ezCards(L.cards);
+ const B=L.bingo,ready=EZ.claimT!=null&&!G.over;ezBtn(B,ready?'BINGO! TAP!':'BINGO',ezClaim,{col:ready?(Math.sin(GT*10)>0?'#f59f00':'#e8590c'):'#2b5f4a',fs:Math.min(56,B[3]*.48),glow:ready,primary:true});
+ if(ready){const f=Math.min(1,(G.t-EZ.claimT)/EZ_AUTO_CLAIM);g.fillStyle='rgba(255,255,255,.8)';g.fillRect(B[0]+16,B[1]+B[3]-15,(B[2]-32)*f,6)}
+ if(G.list.length==0&&!G.over)ezT('Eyes down…',L.cards[0]+L.cards[2]/2,L.cards[1]+L.cards[3]/2,48,'#ffd43b','center',L.cards[2]-20,'rgba(0,0,0,.7)');
+ if(G.over&&EZ.res){g.fillStyle='rgba(0,0,0,.45)';g.fillRect(0,0,LW,LH);if(EZ.res.win){const s=1+Math.sin(GT*8)*.05;ezT('BINGO!',LW/2,LH*.42,96*s,'#ffd43b','center',LW-30,'#7a1020');ezT('You won!',LW/2,LH*.42+80,48,'#fff','center',LW-30,'rgba(0,0,0,.7)')}
+  else ezT(EZ.res.who=='Nobody'?'No winner this time':EZ.res.who+' won this one',LW/2,LH*.45,40,'#fff','center',LW-30,'rgba(0,0,0,.7)')}
+ for(const f of fx){g.globalAlpha=CL(2-f.t,0,1);g.fillStyle=f.c;g.fillRect(f.x,f.y,7,10)}g.globalAlpha=1}
+function ezBetween(){hallBg();const r=EZ.res||{win:false,who:'Nobody'},L=EZ.land;const cx=L?LW*.64:LW/2,tw=L?LW*.6:LW-30;
+ const ms=L?Math.min(2.2,(LH-40)/130):1.9,mx=L?LW*.2:LW/2,my=L?LH-14-60*ms:LH*.5-62*ms;mamaDraw(mx,my,ms,GT,1,r.win?1:0);if(r.win){g.save();g.translate(mx-90*ms/1.9,my+34*ms);g.scale(.55,.55);ART.cow(GT);g.restore()}
+ ezT(r.win?'BINGO! You won!':r.who=='Nobody'?'No winner':r.who+' won',cx,L?44:60,44,r.win?'#ffd43b':'#fff','center',tw,'rgba(0,0,0,.7)');
+ ezT(r.win?'Well done, dearie!':'Next game soon, dearie!',cx,L?96:116,32,'#fff','center',tw,'rgba(0,0,0,.7)');
+ const bw=Math.min(L?LW*.52:LW-32,400),bh=L?108:118,x=cx-bw/2;let y=L?Math.max(136,LH-bh-18-76-14):my+64*ms+24;
+ ezBtn([x,y,bw,bh],'▶ PLAY AGAIN',ezNext,{col:'#2b8a3e',fs:44,primary:true});const f=Math.min(1,(EZ.betT||0)/EZ_NEXT);g.fillStyle='rgba(255,255,255,.75)';g.fillRect(x+16,y+bh-16,(bw-32)*f,6);
+ y+=bh+18;ezBtn([x,y,bw,76],'🏠 Home',()=>{G=null;state='title';chrome(true)},{col:'#1864ab',fs:32});
+ for(const f2 of fx){g.globalAlpha=CL(2-f2.t,0,1);g.fillStyle=f2.c;g.fillRect(f2.x,f2.y,7,10)}g.globalAlpha=1}
+render=function(){g.setTransform(1,0,0,1,0,0);g.fillStyle='#1a120c';g.fillRect(0,0,CW,CH);g.setTransform(DPR*SC,0,0,DPR*SC,DPR*OXs,DPR*OYs);g.save();g.beginPath();g.rect(0,0,LW,LH);g.clip();menuBtns=[];
+ if(state=='title')ezTitle();else if(state=='levels')ezLevels();else if(state=='settings')ezSettingsScreen(hallBg,()=>{state='title'});else if(state=='between')ezBetween();else if(G)ezPlay();else ezTitle();
+ if(paused){menuBtns=[];ezPauseOverlay(()=>{G=null;state='title';chrome(true)})}g.restore()};
+activeBtns=function(){return menuBtns};
+const _ezCall=callBall;callBall=function(){_ezCall();if(G)G.lastCall=G.t};
+togglePause=function(){if(state!='play'||!G||G.over)return;paused=!paused;try{paused?speechSynthesis.cancel():0}catch(e){}};
+window.musicPaused=()=>paused||state=='title'||state=='levels'||state=='settings';
+addEventListener('keydown',e=>{if((e.code=='Enter'||e.code=='Space')&&!e.repeat){if(state=='play'&&!paused){e.preventDefault();ezClaim()}else if(state=='title'){e.preventDefault();ezStart()}}});
+setMute=(function(sm){return function(m){sm(m);save.voice=!m;sv()}})(setMute);
+if(muted)save.voice=false;if(!save.ez1){save.ez1=1;save.ncards=1;save.room='kirk';sv()}state='title';resizeCanvas();
+window.__T=window.__T||{};Object.defineProperties(__T,{state:{get(){return state},configurable:true},G:{get(){return G},configurable:true}});Object.assign(__T,{ez:EZ,start:ezStart,claim:ezClaim,update,fast(){SPEEDS.forEach(s=>s.s=.25)},
+ btns:()=>menuBtns.filter(b=>!b.cell).map(b=>({label:b.label,x:b.x*SC+OXs,y:b.y*SC+OYs,w:b.w*SC,h:b.h*SC})),cellBtns:()=>menuBtns.filter(b=>b.cell).map(b=>({x:b.x*SC+OXs,y:b.y*SC+OYs,w:b.w*SC,h:b.h*SC})),
+ claimable:()=>!!(G&&!G.over&&playerWinCards().length),chars:()=>EZ.chars,logo:()=>EZ.logo});
 </script>
 <!--lb--><script>// LIVE config (Firestore). Public web keys only (safe to ship per Firebase docs). Used only for J Woo's Fishing Challenge + its five8nine copy.
 window.PALB_CONFIG = {
@@ -592,7 +720,7 @@ async function postNow(){if(!G)return;const F=x=>x==null?()=>undefined:typeof x=
   return show()}
 const api={init,postNow,syncBest,localBest,gameOver,submitQuiet,watch,show,close,isOpen:()=>open,get backend(){return REMOTE?REMOTE.name:'local'},_t:{cleanName,nameError,fmt,boardId,pid,keyOf}};
 window.PALB=api})();
-</script><script>PALB.init({"game": "mama-macgregors-bingo-hall", "title": "Mama MacGregor's Bingo Hall", "order": "desc", "unit": "wins", "min": 0, "max": 1000000, "boards": null, "watch": [{"when": "!!(typeof G!=='undefined'&&G&&G.over)", "score": "save.best.wins", "silent": true}]})</script><!--/lb--><!--share--><style>#dock{position:fixed;z-index:60;display:none;gap:6px;top:0;left:0}#dock.inl{position:static;display:flex;justify-content:center;flex-wrap:wrap;margin:6px auto}
+</script><script>PALB.init({"game": "mama-macgregors-bingo-hall", "title": "Mama MacGregor's Bingo Hall", "order": "desc", "unit": "wins", "min": 0, "max": 1000000, "boards": null, "button": false, "watch": []})</script><!--/lb--><!--share--><style>#dock{position:fixed;z-index:60;display:none;gap:6px;top:0;left:0}#dock.inl{position:static;display:flex;justify-content:center;flex-wrap:wrap;margin:6px auto}
 .dk{box-sizing:border-box;height:34px;border-radius:17px;border:2px solid #fff;background:rgba(0,0,0,.66);color:#fff;font:bold 14px/30px system-ui,-apple-system,Segoe UI,sans-serif;padding:0 12px;margin:0;white-space:nowrap;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;flex:none}
 .dk.ic{width:40px;padding:0;font-size:17px}#dock.inl .dk{height:44px;line-height:40px;font-size:17px;padding:0 18px;border-radius:22px;border-width:3px}
 #dockHint{position:fixed;z-index:61;display:none;box-sizing:border-box;background:rgba(10,10,20,.92);color:#fff;border:2px solid #fff;border-radius:12px;font:13px/1.3 system-ui,-apple-system,sans-serif;padding:7px 36px 7px 10px;top:0;left:0}#dockHint.inl{position:relative;margin:4px auto;max-width:320px}
@@ -677,5 +805,4 @@ GamepadSupport.init({
 });
 </script>
 <!-- gamepad:end -->
-<script src="studio-logo.js?v=1" data-src="studio-logo.webp" data-alt="Book of Heaven Studios" data-when="state==='title'" data-corner="br" data-cornerl="br" data-h="54" data-hl="46"></script>
 </body></html>
